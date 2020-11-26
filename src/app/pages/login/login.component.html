@@ -1,0 +1,14 @@
+<!-- Next Steps -->
+<h2>Manager Application</h2>
+<p>Sign to have access to the application</p>
+
+<input type="hidden" #selection>
+
+<!-- Terminal -->
+<div class="terminal">
+   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <pre>Enter your username: <input type="text" formControlName="username" type="email"></pre>
+      <pre>Enter your password: <input type="text" formControlName="password" type="password"></pre>
+      <pre class="button-pre"><button type="submit">Sign In</button></pre>
+   </form>
+</div>
