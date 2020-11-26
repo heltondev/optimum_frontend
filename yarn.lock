@@ -144,7 +144,7 @@
     "universal-analytics" "^0.4.20"
     "uuid" "^3.3.2"
 
-"@angular/common@~8.2.13", "@angular/common@8.2.14":
+"@angular/common@>=7.1.0", "@angular/common@~8.2.13", "@angular/common@8.2.14":
   "integrity" "sha512-Qmt+aX2quUW54kaNT7QH7WGXnFxr/cC2C6sf5SW5SdkZfDQSiz8IaItvieZfXVQUbBOQKFRJ7TlSkt0jI/yjvw=="
   "resolved" "https://registry.yarnpkg.com/@angular/common/-/common-8.2.14.tgz"
   "version" "8.2.14"
@@ -213,6 +213,13 @@
   "version" "8.2.14"
   dependencies:
     "tslib" "^1.9.0"
+
+"@auth0/angular-jwt@^4.2.0":
+  "integrity" "sha512-kxHMztP0scAaKSfWRQ4y3ba5ggcGh2YVapC1UnimyE1I1Vs68gdSlV00bnpAK4aCaNut9IqtdGurgbljHt24Lw=="
+  "resolved" "https://registry.npmjs.org/@auth0/angular-jwt/-/angular-jwt-4.2.0.tgz"
+  "version" "4.2.0"
+  dependencies:
+    "url" "^0.11.0"
 
 "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.8.3":
   "integrity" "sha512-vG6SvB6oYEhvgisZNFRmRCUkLz11c7rp+tbNTynGqc6mS1d5ATd/sGyV6W0KZZnXRKMTzZDRgQT3Ou9jhpAfUg=="
@@ -4742,6 +4749,11 @@
     "pako" "~1.0.2"
     "readable-stream" "~2.3.6"
     "set-immediate-shim" "~1.0.1"
+
+"jwt-decode@^3.1.2":
+  "integrity" "sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A=="
+  "resolved" "https://registry.npmjs.org/jwt-decode/-/jwt-decode-3.1.2.tgz"
+  "version" "3.1.2"
 
 "karma-chrome-launcher@~2.2.0":
   "integrity" "sha512-uf/ZVpAabDBPvdPdveyk1EPgbnloPvFFGgmRhYLTDH7gEB4nZdSBk8yTU47w1g/drLSx5uMOkjKk7IWKfWg/+w=="
