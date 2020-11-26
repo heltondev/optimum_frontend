@@ -33,9 +33,10 @@ export class LoginComponent implements OnInit {
       if ('token' in response) {
         console.log( response.token );
         sessionStorage.setItem( 'token', response.token );
+        this.router.navigateByUrl( '/customer' );
       }
     }, ( error ) => { 
-        this.router.navigateByUrl( '/' );
+        this.router.navigateByUrl('/');
         sessionStorage.removeItem('token')
         console.error( "[Login Page] => ", (error.message) ? error.message : error );
         alert( "Login failed" );
