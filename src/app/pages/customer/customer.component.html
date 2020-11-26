@@ -1,1 +1,68 @@
-<p>customer works!</p>
+
+
+<p>You can search by <code>Name</code>, <code>Zipcode (CEP)</code> and <code>CPF</code>. Just type into the search box and the results of your search will come out and resize the table.</p>
+
+<form>
+   <div class="row">
+      <div class="col">
+         <div class="form-group form-inline">
+            Search: <input class="form-control ml-2" type="text" [formControl]="filter" />
+            <button type="button" class="ml-3 btn btn-outline-success"><samp>+</samp> CUSTOMER</button>
+         </div>
+      </div>
+      <div class="col text-right">
+         <button (click)="logout()" type="button" class="btn btn-outline-danger">LOGOUT</button>
+      </div>
+   </div>
+</form>
+
+<table class="table table-striped">
+   <thead>
+      <tr>
+         <th scope="col">#</th>
+         <th scope="col">Name</th>
+         <th scope="col">Data of Birth</th>
+         <th scope="col">State</th>
+         <th scope="col">City</th>
+         <th scope="col">Zipcode</th>
+         <th scope="col">CPF</th>
+         <th scope="col">Contacts</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr *ngFor="let item of items$ | async; index as i">
+         <th scope="row">{{ i + 1 }}</th>
+         <td>
+            <ngb-highlight [result]="item.name" [term]="filter.value"></ngb-highlight>
+         </td>
+         <td>
+            {{item?.dateOfBirth | date:'dd/MM/y H:mm'}}
+         </td>
+         <td>
+            {{item?.state}}
+         </td>
+         <td>
+            {{item?.city}}
+         </td>
+         <td>
+            <ngb-highlight [result]="item.zipcode | cep" [term]="filter.value"></ngb-highlight>
+         </td>
+         <td>
+            <ngb-highlight [result]="item.cpf | cpf" [term]="filter.value"></ngb-highlight>
+         </td>
+         <td>
+            <span *ngFor="let contact of item?.contacts">
+               <ng-container *ngIf="contact?.email">
+                  {{contact?.email}} <br *ngIf="contact?.phone" />
+               </ng-container>
+               <ng-container *ngIf="contact?.phone">
+                  {{contact?.phone}} <br *ngIf="contact.skypeId" />
+               </ng-container>
+               <ng-container *ngIf="contact?.skypeId">
+                  {{contact?.skypeId}} <br *ngIf="contact.skypeId" />
+               </ng-container>
+            </span>
+         </td>
+      </tr>
+   </tbody>
+</table>
