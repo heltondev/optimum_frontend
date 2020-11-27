@@ -23,7 +23,46 @@ export class CustomerComponent implements OnInit {
     private pipe: DecimalPipe,
     private apiService: ApiService,
     private router: Router
-  ) { }
+  ) { 
+    this.items = [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "dateOfBirth": "2000-10-10T10:00:00.000+00:00",
+        "state": "SP",
+        "city": "Sao Paulo",
+        "zipcode": "16300000",
+        "cpf": "00000000000"
+      },
+      {
+        "id": 2,
+        "name": "Rachel Doe",
+        "dateOfBirth": "2002-08-15T10:00:00.000+00:00",
+        "state": "SP",
+        "city": "Penapolis",
+        "zipcode": "17900000",
+        "cpf": "11111111111"
+      },
+      {
+        "id": 3,
+        "name": "Ray Doe",
+        "dateOfBirth": "2001-07-11T10:00:00.000+00:00",
+        "state": "CE",
+        "city": "Fortaleza",
+        "zipcode": "11100000",
+        "cpf": "22222222222"
+      },
+      {
+        "id": 4,
+        "name": "Julie Doe",
+        "dateOfBirth": "2005-07-11T20:00:00.000+00:00",
+        "state": "RJ",
+        "city": "Fortaleza",
+        "zipcode": "11100000",
+        "cpf": "22222222222"
+      }
+    ]
+  }
 
   ngOnInit () {
     setTimeout(() => {

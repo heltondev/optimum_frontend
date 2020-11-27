@@ -13,6 +13,7 @@ import { AuthGuardService } from './auth/auth-guard.service';
 import { SortableDirective } from './directives/sortable.directive';
 import { CustomerComponent } from './pages/customer/customer.component';
 import { LoginComponent } from './pages/login/login.component';
+import { AddCustomerModalComponent } from './components/customer/add-customer-modal/add-customer-modal.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { LoginComponent } from './pages/login/login.component';
     AppComponent,
     LoginComponent,
     CustomerComponent,
-    SortableDirective
+    SortableDirective,
+    AddCustomerModalComponent
   ],
   imports: [
     BrowserModule,
