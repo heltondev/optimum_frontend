@@ -19,14 +19,23 @@ export class ApiService {
   }
 
   getAllCustomers () {
-    const headers: HttpHeaders = new HttpHeaders( {
-      'Content-Type': 'text/plain',
+    const headers = new HttpHeaders( {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': "*",
+      'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH',
+      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Accept',
       'Authorization': `Bearer ${ sessionStorage.getItem( 'token' ) }`
-    } );
-    console.log(headers);
-    
+    } )
     return this.http.get( `${ environment.api.url }/api/v1/customers`, {
-      headers: headers
+      headers: (headers)
     } );
+  }
+
+  getAllStates () { 
+    return this.http.get( 'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome' );
+  }
+  
+  getCityByState ( id: number ) { 
+    return this.http.get( `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${id}/municipios?orderBy=nome` );
   }
 }
