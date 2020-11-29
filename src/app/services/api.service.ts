@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import { ICustomer } from '../interfaces/customer';
 import { ILogin } from '../interfaces/login';
 
 @Injectable({
@@ -21,13 +22,14 @@ export class ApiService {
   getAllCustomers () {
     const headers = new HttpHeaders( {
       'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': "*",
-      'Access-Control-Allow-Methods': 'GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH',
-      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Accept',
-      'Authorization': `Bearer ${ sessionStorage.getItem( 'token' ) }`
+      'Access-Control-Allow-Origin': "http://localhost:4200",
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Accept, Authorization',
+      'Authorization': `Bearer ${ sessionStorage.getItem( 'token' ) }`,
     } )
-    return this.http.get( `${ environment.api.url }/api/v1/customers`, {
-      headers: (headers)
+    return this.http.get<ICustomer[]>( `${ environment.api.url }/api/v1/customers`, {
+      headers: ( headers ),
+      withCredentials: true
     } );
   }
 
