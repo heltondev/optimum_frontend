@@ -25,10 +25,14 @@ export class AddCustomerModalComponent implements OnInit {
     dateOfBirth: new FormControl( '' ),
     datePicker: new FormControl( '' ),
     timePicker: new FormControl( '' ),
+    contacts: new FormControl( [] || null ),
     state: new FormControl( '', [ <any> Validators.required] ),
     city: new FormControl( '', [ <any> Validators.required] ),
     cpf: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cpf ]  ),
-    cep: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ]  ),
+    cep: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ] ),
+    phone_temp: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.telefone ] ),
+    email_temp: new FormControl( '' ),
+    skype_temp: new FormControl( '' ),
   } );
 
   constructor (
@@ -61,6 +65,10 @@ export class AddCustomerModalComponent implements OnInit {
     } );
     this.customerForm.removeControl( 'datePicker' );
     this.customerForm.removeControl('timePicker');
+    this.customerForm.removeControl('phone_temp');
+    this.customerForm.removeControl('email_temp');
+    this.customerForm.removeControl( 'skype_temp' );
+    this.customerForm.reset( this.customerForm.value );
     console.log( 'this.customerForm.value', this.customerForm.value );
   }
 
@@ -71,6 +79,22 @@ export class AddCustomerModalComponent implements OnInit {
       return 'by clicking on a backdrop';
     } else {
       return `with: ${ reason }`;
+    }
+  }
+
+  addContact () { 
+    if (
+      this.customerForm.value.phone_temp != null
+      || this.customerForm.value.email_temp != null
+      || this.customerForm.value.skype_temp != null
+    ) {
+      this.customerForm.value.contacts.push( {
+        email: this.customerForm.value.email_temp || null,
+        phone: this.customerForm.value.phone_temp || null,
+        skypeId: this.customerForm.value.skype_temp || null
+      } );
+    } else { 
+      alert( "Error: Contact should have at least one field filled" );
     }
   }
 }

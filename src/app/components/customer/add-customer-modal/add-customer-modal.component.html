@@ -1,7 +1,7 @@
 <ng-template #content let-modal>
    <form id="customerForm" [formGroup]="customerForm">
-      <div class="modal-header">
-         <h4 class="modal-title" id="modal-basic-title">Add new customer</h4>
+      <div class="modal-header text-center">
+         <h2 class="modal-title" id="modal-basic-title">Add new customer</h2>
          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
          </button>
@@ -63,6 +63,54 @@
                      <option *ngFor="let item of cities$ | async" [value]="item.nome">{{item.nome}}</option>
                   </select>
                </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-12 text-center">
+               <hr>
+               <h4>Contact</h4>
+               <hr>
+            </div>
+            <div class="col-6">
+               <div class="form-group">
+                  <label for="phone">Phone #</label>
+                  <input type="text" class="form-control" id="phone_temp" placeholder="Phone" formControlName="phone_temp" telefone #telefone [textMask]="{mask: MASKS.telefone.textMask}">
+               </div>
+            </div>
+            <div class="col-6">
+               <div class="form-group">
+                  <label for="skype">Skype ID</label>
+                  <input type="text" class="form-control" id="skype_temp" placeholder="Skype ID" formControlName="skype_temp">
+               </div>
+            </div>
+            <div class="col-12">
+               <div class="form-group">
+                  <label for="email">E-mail</label>
+                  <div class="input-group">
+                     <input type="email" class="form-control" id="email_temp" placeholder="Email" formControlName="email_temp">
+                     <div class="input-group-append">
+                        <button class="btn btn-outline-info" (click)="addContact();">+ Add Contact</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="col-12">
+               <table class="table">
+                  <thead>
+                     <tr>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Skype</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let item of customerForm?.value?.contacts">
+                        <td>{{item?.email}}</td>
+                        <td>{{item?.phone}}</td>
+                        <td>{{item?.skypeId}}</td>
+                     </tr>
+                  </tbody>
+               </table>
             </div>
          </div>
       </div>
