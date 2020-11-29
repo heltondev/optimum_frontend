@@ -40,4 +40,18 @@ export class ApiService {
   getCityByState ( id: number ) { 
     return this.http.get( `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${id}/municipios?orderBy=nome` );
   }
+
+  addCustomer (payload: ICustomer) { 
+    const headers = new HttpHeaders( {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': "http://localhost:4200",
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Accept, Authorization',
+      'Authorization': `Bearer ${ sessionStorage.getItem( 'token' ) }`,
+    } );
+    return this.http.post<ICustomer>( `${ environment.api.url }/api/v1/customers`, payload, {
+      headers: ( headers ),
+      withCredentials: true
+    } );
+  }
 }

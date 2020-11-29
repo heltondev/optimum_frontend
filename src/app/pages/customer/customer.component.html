@@ -7,7 +7,7 @@
       <div class="col">
          <div class="form-group form-inline">
             Search: <input class="form-control ml-2" type="text" [formControl]="filter" />
-            <app-add-customer-modal></app-add-customer-modal>
+            <app-add-customer-modal (handleAddUserToTable)="addUserToTable($event)"></app-add-customer-modal>
          </div>
       </div>
       <div class="col text-right">
@@ -61,6 +61,7 @@
                <ng-container *ngIf="contact?.skypeId">
                   {{contact?.skypeId}} <br *ngIf="contact.skypeId" />
                </ng-container>
+               <hr *ngIf="item?.contacts?.length > 1">
             </span>
          </td>
       </tr>

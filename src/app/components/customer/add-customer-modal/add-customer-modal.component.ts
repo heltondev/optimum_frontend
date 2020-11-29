@@ -1,11 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbDateStruct, NgbModal, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MASKS, NgBrazilValidators } from 'ng-brazil';
 import { Observable } from 'rxjs';
+import { ICustomer } from 'src/app/interfaces/customer';
 import { ApiService } from 'src/app/services/api.service';
-
-
 
 @Component({
   selector: 'app-add-customer-modal',
@@ -35,6 +34,8 @@ export class AddCustomerModalComponent implements OnInit {
     skype_temp: new FormControl( '' ),
   } );
 
+  @Output() handleAddUserToTable: EventEmitter<ICustomer> = new EventEmitter<ICustomer>();
+
   constructor (
     private modalService: NgbModal,
     private apiService: ApiService
@@ -62,14 +63,23 @@ export class AddCustomerModalComponent implements OnInit {
 
   onSubmit () : void { 
     this.customerForm.patchValue( {
-      dateOfBirth: `${ this.customerForm.value.datePicker.year }-${ this.customerForm.value.datePicker.month }-${ this.customerForm.value.datePicker.day } ${ this.customerForm.value.timePicker.hour }:${ this.customerForm.value.timePicker.minute }:${ this.customerForm.value.timePicker.second}`
+      dateOfBirth: `${ this.customerForm.value.datePicker.year }-${ this.customerForm.value.datePicker.month }-${ this.customerForm.value.datePicker.day }T${ this.customerForm.value.timePicker.hour }:${ this.customerForm.value.timePicker.minute }:${ this.customerForm.value.timePicker.second}`
     } );
     this.customerForm.removeControl( 'datePicker' );
-    this.customerForm.removeControl('timePicker');
-    this.customerForm.removeControl('phone_temp');
-    this.customerForm.removeControl('email_temp');
+    this.customerForm.removeControl( 'timePicker' );
+    this.customerForm.removeControl( 'phone_temp' );
+    this.customerForm.removeControl( 'email_temp' );
     this.customerForm.removeControl( 'skype_temp' );
-    console.log( 'this.customerForm.value', this.customerForm.value );
+    this.apiService
+      .addCustomer( this.customerForm.value )
+      .subscribe( ( response: ICustomer ) => { 
+        if ( 'id' in response ) {
+          this.handleAddUserToTable.emit( response );
+        } else { 
+          this.handleAddUserToTable.emit( null );
+          alert( "Error: Customer not added" );
+        }
+      })
     this.resetForm();
     this.modalService.dismissAll();
   }

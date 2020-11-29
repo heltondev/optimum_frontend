@@ -52,9 +52,24 @@ export class CustomerComponent implements OnInit {
     }
   }
 
-  logout () {
+  logout (): void {
     sessionStorage.removeItem( 'token' );
     this.router.navigateByUrl( '/' );
   }
+
+  addUserToTable ( newCustomer: ICustomer ): void { 
+    if ( 'id' in newCustomer ) {
+      this.items.push( newCustomer );
+      this.items$ = this.items$
+        .pipe(
+          map( customerList => { 
+            customerList.push( newCustomer );
+            return customerList;
+          })
+        )
+    }
+  }
+
+
 
 }
