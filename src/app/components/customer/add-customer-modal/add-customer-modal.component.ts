@@ -16,7 +16,7 @@ export class AddCustomerModalComponent implements OnInit {
   
   MASKS = MASKS;
   model: NgbDateStruct;
-  time: NgbTimeStruct = { hour: 13, minute: 30, second: 30 };
+  time: NgbTimeStruct;
   closeResult = '';
   states$: Observable<any> = new Observable(null);
   cities$: Observable<any> = new Observable(null);
@@ -44,7 +44,8 @@ export class AddCustomerModalComponent implements OnInit {
     this.states$ = this.apiService.getAllStates();
   }
 
-  open ( content ) {
+  open ( content ): void {
+    this.resetForm();
     this.modalService.open( content, { ariaLabelledBy: 'modal-basic-title' } ).result.then( ( result ) => {
       this.closeResult = `Closed with: ${ result }`;
     }, ( reason ) => {
@@ -52,14 +53,14 @@ export class AddCustomerModalComponent implements OnInit {
     } );
   }
 
-  handleCity ( cityName ) { 
+  handleCity ( cityName ) : void { 
     this.states$.subscribe( res => {
       const selected = res.filter( state => state.nome === cityName );
       this.cities$ = this.apiService.getCityByState( selected[ 0 ].id );
     } )
   }
 
-  onSubmit () { 
+  onSubmit () : void { 
     this.customerForm.patchValue( {
       dateOfBirth: `${ this.customerForm.value.datePicker.year }-${ this.customerForm.value.datePicker.month }-${ this.customerForm.value.datePicker.day } ${ this.customerForm.value.timePicker.hour }:${ this.customerForm.value.timePicker.minute }:${ this.customerForm.value.timePicker.second}`
     } );
@@ -68,8 +69,9 @@ export class AddCustomerModalComponent implements OnInit {
     this.customerForm.removeControl('phone_temp');
     this.customerForm.removeControl('email_temp');
     this.customerForm.removeControl( 'skype_temp' );
-    this.customerForm.reset( this.customerForm.value );
     console.log( 'this.customerForm.value', this.customerForm.value );
+    this.resetForm();
+    this.modalService.dismissAll();
   }
 
   private getDismissReason ( reason: any ): string {
@@ -82,7 +84,7 @@ export class AddCustomerModalComponent implements OnInit {
     }
   }
 
-  addContact () { 
+  addContact () : void { 
     if (
       this.customerForm.value.phone_temp != null
       || this.customerForm.value.email_temp != null
@@ -96,5 +98,24 @@ export class AddCustomerModalComponent implements OnInit {
     } else { 
       alert( "Error: Contact should have at least one field filled" );
     }
+  }
+
+  private resetForm (): void { 
+    this.model = {year: null, month: null, day: null};
+    this.time = { hour: null, minute: null, second: null };
+    this.customerForm = new FormGroup( {
+      name: new FormControl( '' ),
+      dateOfBirth: new FormControl( '' ),
+      datePicker: new FormControl( '' ),
+      timePicker: new FormControl( '' ),
+      contacts: new FormControl( [] || null ),
+      state: new FormControl( '', [ <any> Validators.required ] ),
+      city: new FormControl( '', [ <any> Validators.required ] ),
+      cpf: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cpf ] ),
+      cep: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ] ),
+      phone_temp: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.telefone ] ),
+      email_temp: new FormControl( '' ),
+      skype_temp: new FormControl( '' ),
+    } );
   }
 }
