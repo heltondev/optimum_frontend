@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as MOMENT from 'moment';
-import { MASKS, NgBrazilValidators } from 'ng-brazil';
+import { MASKS } from 'ng-brazil';
 import { Observable } from 'rxjs';
 import { ICustomer } from 'src/app/interfaces/customer';
 import { ApiService } from 'src/app/services/api.service';
@@ -18,35 +18,42 @@ export class EditCustomerModalComponent implements OnInit {
   closeResult = '';
   states$: Observable<any> = new Observable( null );
   cities$: Observable<any> = new Observable( null );
-  customerForm = new FormGroup( {
-    id: new FormControl( 0 ),
-    name: new FormControl( '', [<any> Validators.required, <any> Validators.minLength(3)] ),
-    dateOfBirth: new FormControl( '' ),
-    datePicker: new FormControl( { year: null, month: null, day: null } ),
-    timePicker: new FormControl( { hour: null, minute: null, second: null } ),
-    contacts: new FormControl( [] || null ),
-    state: new FormControl( '', [ <any> Validators.required ] ),
-    city: new FormControl( '', [ <any> Validators.required ] ),
-    cpf: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cpf ] ),
-    zipcode: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ] ),
-    phone_temp: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.telefone ] ),
-    email_temp: new FormControl( '' ),
-    skype_temp: new FormControl( '' ),
-  } );
+  customerForm: FormGroup;
+  formDisabled: boolean;
+  addContactBtn: boolean;
 
   @Output() handleUpdateTable: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   constructor (
     private modalService: NgbModal,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit (): void {
+    this.instantiateForm();
     this.states$ = this.apiService.getAllStates();
-    this.handleCity(this.customer.state);
+    this.handleCity( this.customer.state );
+  }
+
+  private instantiateForm () {
+    this.customerForm = this.fb.group( {
+      id:  0 ,
+      name:  ['', [ Validators.required ] ],
+      dateOfBirth:  '' ,
+      datePicker:  { year: null, month: null, day: null } ,
+      timePicker:  { hour: null, minute: null, second: null } ,
+      contacts:  [],
+      state:  ['', [ Validators.required ] ],
+      city:  ['', [ Validators.required ] ],
+      cpf:  ['', [ Validators.required ] ],
+      zipcode:  ['', [ Validators.required ] ],
+      phone_temp:  ['', [ Validators.required ] ],
+      email_temp:  '' ,
+      skype_temp:  '' ,
+    } )
   }
 
   open ( content ): void {   
-    console.log(this.customer);
       this.customerForm.patchValue( {
       ...this.customer,
       zipcode: this.customer.zipcode || null,
@@ -59,7 +66,8 @@ export class EditCustomerModalComponent implements OnInit {
         hour: MOMENT( this.customer.dateOfBirth ).hour() || MOMENT().hour(),
         minute: MOMENT( this.customer.dateOfBirth ).minute() || MOMENT().minute(),
         second: MOMENT( this.customer.dateOfBirth ).second() || MOMENT().second(),
-      }
+      },
+      contacts: this.customer.contacts || []
     } );
     console.log(this.customerForm.value);
     
@@ -143,5 +151,25 @@ export class EditCustomerModalComponent implements OnInit {
       this.modalService.dismissAll();
     })
   }
+
+  checkAddContact () {
+    this.addContactBtn = (
+      this.customerForm.value.phone_temp.length
+      || this.customerForm.value.email_temp.length
+      || this.customerForm.value.skype_temp.length
+    ) ? true : false;
+  }
+
+  onCheckForm () {
+    this.formDisabled = (
+      this.customerForm.value.name.length
+      && this.customerForm.value.cpf.length
+      && this.customerForm.value.zipcode.length
+      && this.customerForm.value.contacts.length
+      && this.customerForm.value.state.length
+      && this.customerForm.value.city.length
+      && this.customerForm.value.contacts.length
+    ) ? true : false;
+  };
 
 }
