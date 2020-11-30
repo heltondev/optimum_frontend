@@ -11,7 +11,7 @@
             <div class="col-12">
                <div class="form-group">
                   <label for="name">Name</label>
-                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name" formControlName="name" required>
+                  <input (change)="onCheckForm()" type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name" formControlName="name">
                </div>
             </div>
          </div>
@@ -21,7 +21,7 @@
                   <label for="dateOfBirth">Date of Birth</label>
                   <div class="form-group">
                      <div class="input-group">
-                        <input type="text" class="form-control" id="date-of-birth" placeholder="Date of Birth" formControlName="datePicker" name="dp" ngbDatepicker #d="ngbDatepicker">
+                        <input (change)="onCheckForm()" type="text" class="form-control" id="date-of-birth" placeholder="Date of Birth" formControlName="datePicker" name="dp" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
                            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
                         </div>
@@ -37,13 +37,13 @@
             <div class="col-6">
                <div class="form-group">
                   <label for="cpf">CPF</label>
-                  <input type="text" class="form-control" id="cpf" placeholder="CPF" formControlName="cpf" cpf [textMask]="{mask: MASKS.cpf.textMask}">
+                  <input (change)="onCheckForm()" type="text" class="form-control" id="cpf" placeholder="CPF" formControlName="cpf" cpf [textMask]="{mask: MASKS.cpf.textMask}">
                </div>
             </div>
             <div class="col-6">
                <div class="form-group">
                   <label for="state">Zipcode</label>
-                  <input type="text" class="form-control" id="zipcode" placeholder="Zipcode" formControlName="zipcode" cep [textMask]="{mask: MASKS.cep.textMask}">
+                  <input (change)="onCheckForm()" type="text" class="form-control" id="zipcode" placeholder="Zipcode" formControlName="zipcode" cep [textMask]="{mask: MASKS.cep.textMask}">
                </div>
             </div>
             <div class="col-6">
@@ -74,22 +74,22 @@
             <div class="col-6">
                <div class="form-group">
                   <label for="phone">Phone #</label>
-                  <input type="text" class="form-control" id="phone_temp" placeholder="Phone" formControlName="phone_temp" telefone #telefone [textMask]="{mask: MASKS.telefone.textMask}">
+                  <input (change)="checkAddContact()" type="text" class="form-control" id="phone_temp" placeholder="Phone" formControlName="phone_temp" telefone #telefone [textMask]="{mask: MASKS.telefone.textMask}">
                </div>
             </div>
             <div class="col-6">
                <div class="form-group">
                   <label for="skype">Skype ID</label>
-                  <input type="text" class="form-control" id="skype_temp" placeholder="Skype ID" formControlName="skype_temp">
+                  <input (change)="checkAddContact()" type="text" class="form-control" id="skype_temp" placeholder="Skype ID" formControlName="skype_temp">
                </div>
             </div>
             <div class="col-12">
                <div class="form-group">
                   <label for="email">E-mail</label>
                   <div class="input-group">
-                     <input type="email" class="form-control" id="email_temp" placeholder="Email" formControlName="email_temp">
+                     <input (change)="checkAddContact()" type="email" class="form-control" id="email_temp" placeholder="Email" formControlName="email_temp">
                      <div class="input-group-append">
-                        <button class="btn btn-outline-info" (click)="addContact();" [disabled]="(customerForm.value.email_temp || customerForm.value.phone_temp || customerForm.value.skype_temp) ? 'false' : 'true'">+ Add Contact</button>
+                        <button class="btn btn-outline-info" (click)="addContact();" [disabled]="!addContactBtn">+ Add Contact</button>
                      </div>
                   </div>
                </div>
@@ -119,7 +119,7 @@
       <div class="modal-footer">
          <div class="row">
             <div class="col"><button type="button" class="btn btn-outline-danger text-left" (click)="onDelete()">Delete</button></div>
-            <div class="col"><button type="button" class="btn btn-outline-warning text-right" (click)="onSubmit()">Update</button></div>
+            <div class="col"><button type="button" class="btn btn-outline-warning text-right" (click)="onSubmit()" [disabled]="!formDisabled">Update</button></div>
          </div>
       </div>
    </form>

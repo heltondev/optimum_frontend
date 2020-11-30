@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as MOMENT from 'moment';
 import { MASKS, NgBrazilValidators } from 'ng-brazil';
@@ -18,31 +18,52 @@ export class AddCustomerModalComponent implements OnInit {
   closeResult = '';
   states$: Observable<any> = new Observable(null);
   cities$: Observable<any> = new Observable(null);
-  customerForm = new FormGroup( {
-    name: new FormControl( '', [Validators.required] ),
-    dateOfBirth: new FormControl( '' ),
-    datePicker: new FormControl( { year: null, month: null, day: null} ),
-    timePicker: new FormControl( { hour: null, minute: null, second: null } ),
-    contacts: new FormControl( [] || null ),
-    state: new FormControl( '', [ Validators.required] ),
-    city: new FormControl( '', [ Validators.required] ),
-    cpf: new FormControl( '', [ Validators.required ]  ),
-    zipcode: new FormControl( '', [ Validators.required] ),
-    phone_temp: new FormControl( ''),
-    email_temp: new FormControl( ''),
-    skype_temp: new FormControl( '' ),
-  } );
+  customerForm: FormGroup;
+  formDisabled: boolean;
+  addContactBtn: boolean;
 
   @Output() handleAddUserToTable: EventEmitter<ICustomer> = new EventEmitter<ICustomer>();
 
   constructor (
     private modalService: NgbModal,
-    private apiService: ApiService
+    private apiService: ApiService,
+    private fb: FormBuilder
   ) { }
 
   ngOnInit (): void {
+    this.initiateForm();
+    console.log( 'this.customerForm', this.customerForm );
     this.states$ = this.apiService.getAllStates();
   }
+
+  private initiateForm (): void {
+    this.fb.group( {
+      name: new FormControl( '', [ Validators.required ] ),
+      dateOfBirth: new FormControl( null ),
+      datePicker: new FormControl( { year: null, month: null, day: null } ),
+      timePicker: new FormControl( { hour: null, minute: null, second: null } ),
+      contacts: new FormControl( [] ),
+      state: new FormControl( null ),
+      city: new FormControl( null ),
+      cpf: new FormControl( null ),
+      zipcode: new FormControl( null ),
+      phone_temp: new FormControl( null ),
+      email_temp: new FormControl( null ),
+      skype_temp: new FormControl( null ),
+    } );
+  }
+
+  onCheckForm () { 
+    this.formDisabled = ( 
+      this.customerForm.value.name.length
+      && this.customerForm.value.cpf.length
+      && this.customerForm.value.zipcode.length
+      && this.customerForm.value.contacts.length
+      && this.customerForm.value.state.length
+      && this.customerForm.value.city.length
+      && this.customerForm.value.contacts.length
+    ) ? true : false    
+  };
 
   open ( content ): void {
     this.resetForm();
@@ -111,6 +132,15 @@ export class AddCustomerModalComponent implements OnInit {
     } else { 
       alert( "Error: Contact should have at least one field filled" );
     }
+    this.onCheckForm();
+  }
+
+  checkAddContact () { 
+    this.addContactBtn = (
+      this.customerForm.value.phone_temp.length
+      || this.customerForm.value.email_temp.length
+      || this.customerForm.value.skype_temp.length
+    ) ? true : false
   }
 
   private resetForm (): void { 
@@ -120,11 +150,11 @@ export class AddCustomerModalComponent implements OnInit {
       datePicker: new FormControl( '' ),
       timePicker: new FormControl( '' ),
       contacts: new FormControl( [] || null ),
-      state: new FormControl( '', [ <any> Validators.required ] ),
-      city: new FormControl( '', [ <any> Validators.required ] ),
-      cpf: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cpf ] ),
-      zipcode: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ] ),
-      phone_temp: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.telefone ] ),
+      state: new FormControl( '', [ Validators.required ] ),
+      city: new FormControl( '', [ Validators.required ] ),
+      cpf: new FormControl( '', [ Validators.required, NgBrazilValidators.cpf ] ),
+      zipcode: new FormControl( '', [ Validators.required, NgBrazilValidators.cep ] ),
+      phone_temp: new FormControl( '', [ Validators.required, NgBrazilValidators.telefone ] ),
       email_temp: new FormControl( '' ),
       skype_temp: new FormControl( '' ),
     } );

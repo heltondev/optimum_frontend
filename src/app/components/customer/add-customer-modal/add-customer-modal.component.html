@@ -11,7 +11,7 @@
             <div class="col-12">
                <div class="form-group">
                   <label for="name">Name</label>
-                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name">
+                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name" formControlName="name" (change)="onCheckForm()">
                </div>
             </div>
          </div>
@@ -37,13 +37,13 @@
             <div class="col-6">
                <div class="form-group">
                   <label for="cpf">CPF</label>
-                  <input type="text" class="form-control" id="cpf" placeholder="CPF" formControlName="cpf" cpf [textMask]="{mask: MASKS.cpf.textMask}">
+                  <input type="text" class="form-control" id="cpf" placeholder="CPF" formControlName="cpf" cpf [textMask]="{mask: MASKS.cpf.textMask}"  (change)="onCheckForm()">
                </div>
             </div>
             <div class="col-6">
                <div class="form-group">
                   <label for="state">Zipcode</label>
-                  <input type="text" class="form-control" id="zipcode" placeholder="Zipcode" formControlName="zipcode" cep [textMask]="{mask: MASKS.cep.textMask}">
+                  <input type="text" class="form-control" id="zipcode" placeholder="Zipcode" formControlName="zipcode" cep [textMask]="{mask: MASKS.cep.textMask}"  (change)="onCheckForm()">
                </div>
             </div>
             <div class="col-6">
@@ -74,22 +74,22 @@
             <div class="col-6">
                <div class="form-group">
                   <label for="phone">Phone #</label>
-                  <input type="text" class="form-control" id="phone_temp" placeholder="Phone" formControlName="phone_temp" telefone #telefone [textMask]="{mask: MASKS.telefone.textMask}">
+                  <input type="text" class="form-control" id="phone_temp" placeholder="Phone" formControlName="phone_temp" telefone #telefone [textMask]="{mask: MASKS.telefone.textMask}" (change)="checkAddContact()">
                </div>
             </div>
             <div class="col-6">
                <div class="form-group">
                   <label for="skype">Skype ID</label>
-                  <input type="text" class="form-control" id="skype_temp" placeholder="Skype ID" formControlName="skype_temp">
+                  <input type="text" class="form-control" id="skype_temp" placeholder="Skype ID" formControlName="skype_temp"  (change)="checkAddContact()">
                </div>
             </div>
             <div class="col-12">
                <div class="form-group">
                   <label for="email">E-mail</label>
                   <div class="input-group">
-                     <input type="email" class="form-control" id="email_temp" placeholder="Email" formControlName="email_temp">
+                     <input type="email" class="form-control" id="email_temp" placeholder="Email" formControlName="email_temp"  (change)="checkAddContact()">
                      <div class="input-group-append">
-                        <button class="btn btn-outline-info" (click)="addContact();">+ Add Contact</button>
+                        <button class="btn btn-outline-info" (click)="addContact()" [disabled]="!addContactBtn">+ Add Contact</button>
                      </div>
                   </div>
                </div>
@@ -115,7 +115,7 @@
          </div>
       </div>
       <div class="modal-footer">
-         <button type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
+         <button type="button" class="btn btn-outline-dark" (click)="onSubmit()" [disabled]="!formDisabled">Save</button>
       </div>
    </form>
 </ng-template>
