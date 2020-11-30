@@ -1,0 +1,128 @@
+<ng-template #contentEdit let-modal>
+   <form id="customerFormEdit" [formGroup]="customerForm">
+      <div class="modal-header text-center">
+         <h2 class="modal-title" id="modal-basic-title">Edit customer</h2>
+         <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+         </button>
+      </div>
+      <div class="modal-body">
+         <div class="row">
+            <div class="col-12">
+               <div class="form-group">
+                  <label for="name">Name</label>
+                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name" formControlName="name">
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-6">
+               <div class="form-group">
+                  <label for="dateOfBirth">Date of Birth</label>
+                  <div class="form-group">
+                     <div class="input-group">
+                        <input type="text" class="form-control" id="date-of-birth" placeholder="Date of Birth" formControlName="datePicker" name="dp" ngbDatepicker #d="ngbDatepicker">
+                        <div class="input-group-append">
+                           <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="col-6">
+               <ngb-timepicker formControlName="timePicker" [seconds]="true"></ngb-timepicker>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-6">
+               <div class="form-group">
+                  <label for="cpf">CPF</label>
+                  <input type="text" class="form-control" id="cpf" placeholder="CPF" formControlName="cpf" cpf [textMask]="{mask: MASKS.cpf.textMask}">
+               </div>
+            </div>
+            <div class="col-6">
+               <div class="form-group">
+                  <label for="state">Zipcode</label>
+                  <input type="text" class="form-control" id="zipcode" placeholder="Zipcode" formControlName="cep" cep [textMask]="{mask: MASKS.cep.textMask}">
+               </div>
+            </div>
+            <div class="col-6">
+               <div class="form-group">
+                  <label for="state">State</label>
+                  <select class="form-control" id="state" placeholder="State" name="state" formControlName="state" (change)="handleCity($event.target.value)">
+                     <option value="" disabled>Choose one option</option>
+                     <option *ngFor="let item of states$ | async" [value]="item.nome">{{item.nome}}</option>
+                  </select>
+               </div>
+            </div>
+            <div class="col-6">
+               <div class="form-group">
+                  <label for="city">City</label>
+                  <select class="form-control" id="city" placeholder="City" name="city" formControlName="city">
+                     <option value="" disabled>Choose one option</option>
+                     <option *ngFor="let item of cities$ | async" [value]="item.nome" [selected]="item.name === customer.city">{{item.nome}}</option>
+                  </select>
+               </div>
+            </div>
+         </div>
+         <div class="row">
+            <div class="col-12 text-center">
+               <hr>
+               <h4>Contact</h4>
+               <hr>
+            </div>
+            <div class="col-6">
+               <div class="form-group">
+                  <label for="phone">Phone #</label>
+                  <input type="text" class="form-control" id="phone_temp" placeholder="Phone" formControlName="phone_temp" telefone #telefone [textMask]="{mask: MASKS.telefone.textMask}">
+               </div>
+            </div>
+            <div class="col-6">
+               <div class="form-group">
+                  <label for="skype">Skype ID</label>
+                  <input type="text" class="form-control" id="skype_temp" placeholder="Skype ID" formControlName="skype_temp">
+               </div>
+            </div>
+            <div class="col-12">
+               <div class="form-group">
+                  <label for="email">E-mail</label>
+                  <div class="input-group">
+                     <input type="email" class="form-control" id="email_temp" placeholder="Email" formControlName="email_temp">
+                     <div class="input-group-append">
+                        <button class="btn btn-outline-info" (click)="addContact();">+ Add Contact</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="col-12">
+               <table class="table">
+                  <thead>
+                     <tr>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">Phone</th>
+                        <th scope="col">Skype</th>
+                        <th></th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let item of customerForm?.value?.contacts; index as idx">
+                        <td>{{item?.email}}</td>
+                        <td>{{item?.phone}}</td>
+                        <td>{{item?.skypeId}}</td>
+                        <td><button class="btn btn-danger" (click)="removeContact(idx)">X</button></td>
+                     </tr>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+      <div class="modal-footer">
+         <div class="row">
+            <div class="col"><button type="button" class="btn btn-outline-danger text-left" (click)="onDelete()">Delete</button></div>
+            <div class="col"><button type="button" class="btn btn-outline-success text-right" (click)="onSubmit()">Save</button></div>
+         </div>
+      </div>
+   </form>
+</ng-template>
+
+<button type="button" class="ml-3 btn btn-outline-info" (click)="open(contentEdit)">EDIT</button>
