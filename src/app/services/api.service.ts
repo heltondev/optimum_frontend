@@ -53,4 +53,11 @@ export class ApiService {
       withCredentials: true
     } );
   } 
+
+  updateCustomer ( id: string | number, payload: ICustomer ) { 
+    return this.http.put<ICustomer>( `${ environment.api.url }/api/v1/customers/${ id }`, payload, {
+      headers: ( this.headers ),
+      withCredentials: true
+    })
+  }
 }

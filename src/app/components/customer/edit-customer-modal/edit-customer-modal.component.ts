@@ -20,7 +20,7 @@ export class EditCustomerModalComponent implements OnInit {
   cities$: Observable<any> = new Observable( null );
   customerForm = new FormGroup( {
     id: new FormControl( 0 ),
-    name: new FormControl( '' ),
+    name: new FormControl( '', [<any> Validators.required, <any> Validators.minLength(3)] ),
     dateOfBirth: new FormControl( '' ),
     datePicker: new FormControl( { year: null, month: null, day: null } ),
     timePicker: new FormControl( { hour: null, minute: null, second: null } ),
@@ -28,7 +28,7 @@ export class EditCustomerModalComponent implements OnInit {
     state: new FormControl( '', [ <any> Validators.required ] ),
     city: new FormControl( '', [ <any> Validators.required ] ),
     cpf: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cpf ] ),
-    cep: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ] ),
+    zipcode: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ] ),
     phone_temp: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.telefone ] ),
     email_temp: new FormControl( '' ),
     skype_temp: new FormControl( '' ),
@@ -49,16 +49,16 @@ export class EditCustomerModalComponent implements OnInit {
     console.log(this.customer);
       this.customerForm.patchValue( {
       ...this.customer,
-      cep: this.customer.zipcode || null,
+      zipcode: this.customer.zipcode || null,
       datePicker: {
-        year: MOMENT( this.customer.dateOfBirth ).year() || null,
-        month: MOMENT( this.customer.dateOfBirth ).month() || null,
-        day: MOMENT( this.customer.dateOfBirth ).day() || null,
+        year: MOMENT( this.customer.dateOfBirth ).year() || MOMENT().year(),
+        month: MOMENT( this.customer.dateOfBirth ).month() || MOMENT().month(),
+        day: MOMENT( this.customer.dateOfBirth ).day() || MOMENT().day(),
       },
       timePicker: {
-        hour: MOMENT( this.customer.dateOfBirth ).hour() || null,
-        minute: MOMENT( this.customer.dateOfBirth ).minute() || null,
-        second: MOMENT( this.customer.dateOfBirth ).second() || null,
+        hour: MOMENT( this.customer.dateOfBirth ).hour() || MOMENT().hour(),
+        minute: MOMENT( this.customer.dateOfBirth ).minute() || MOMENT().minute(),
+        second: MOMENT( this.customer.dateOfBirth ).second() || MOMENT().second(),
       }
     } );
     console.log(this.customerForm.value);
@@ -80,11 +80,11 @@ export class EditCustomerModalComponent implements OnInit {
   }
 
   onSubmit (): void {
-    console.log( this.customerForm.value.datePicker );
-    console.log( this.customerForm.value.timerPicker );
 
     this.customerForm.patchValue( {
-      dateOfBirth: MOMENT( `${ this.customerForm.value.datePicker.year }-${ this.customerForm.value.datePicker.month }-${ this.customerForm.value.datePicker.day } ${ this.customerForm.value.timePicker.hour }:${ this.customerForm.value.timePicker.minute }:${ this.customerForm.value.timePicker.second }` ).format( 'YYYY-MM-DD HH:mm:ss' )
+      dateOfBirth: MOMENT( `${ this.customerForm.value.datePicker.year }-${ this.customerForm.value.datePicker.month }-${ this.customerForm.value.datePicker.day } ${ this.customerForm.value.timePicker.hour }:${ this.customerForm.value.timePicker.minute }:${ this.customerForm.value.timePicker.second }` ).format( 'YYYY-MM-DD HH:mm:ss' ),
+      cpf: this.customerForm.value.cpf.replace( /\D+/g, '' ),
+      zipcode: this.customerForm.value.zipcode.replace( /\D+/g, '' )
     } );
     const orginalFormValues = this.customerForm.value;
     this.customerForm.removeControl( 'datePicker' );
@@ -92,8 +92,9 @@ export class EditCustomerModalComponent implements OnInit {
     this.customerForm.removeControl( 'phone_temp' );
     this.customerForm.removeControl( 'email_temp' );
     this.customerForm.removeControl( 'skype_temp' );
+    this.customerForm.removeControl( 'id' );
     this.apiService
-      .addCustomer( this.customerForm.value )
+      .updateCustomer( this.customer.id, this.customerForm.value )
       .subscribe( ( response: ICustomer ) => {
         if ( 'id' in response ) {
           this.handleUpdateTable.emit( true );

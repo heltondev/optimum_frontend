@@ -19,17 +19,17 @@ export class AddCustomerModalComponent implements OnInit {
   states$: Observable<any> = new Observable(null);
   cities$: Observable<any> = new Observable(null);
   customerForm = new FormGroup( {
-    name: new FormControl( ''  ),
+    name: new FormControl( '', [Validators.required] ),
     dateOfBirth: new FormControl( '' ),
     datePicker: new FormControl( { year: null, month: null, day: null} ),
     timePicker: new FormControl( { hour: null, minute: null, second: null } ),
     contacts: new FormControl( [] || null ),
-    state: new FormControl( '', [ <any> Validators.required] ),
-    city: new FormControl( '', [ <any> Validators.required] ),
-    cpf: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cpf ]  ),
-    cep: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ] ),
-    phone_temp: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.telefone ] ),
-    email_temp: new FormControl( '' ),
+    state: new FormControl( '', [ Validators.required] ),
+    city: new FormControl( '', [ Validators.required] ),
+    cpf: new FormControl( '', [ Validators.required ]  ),
+    zipcode: new FormControl( '', [ Validators.required] ),
+    phone_temp: new FormControl( ''),
+    email_temp: new FormControl( ''),
     skype_temp: new FormControl( '' ),
   } );
 
@@ -61,13 +61,10 @@ export class AddCustomerModalComponent implements OnInit {
   }
 
   onSubmit (): void { 
-    console.log(this.customerForm.value.datePicker);
-    console.log(this.customerForm.value.timerPicker);
-    
     this.customerForm.patchValue( {
       dateOfBirth: MOMENT( `${ this.customerForm.value.datePicker.year }-${ this.customerForm.value.datePicker.month }-${ this.customerForm.value.datePicker.day } ${ this.customerForm.value.timePicker.hour }:${ this.customerForm.value.timePicker.minute }:${ this.customerForm.value.timePicker.second }` ).format( 'YYYY-MM-DD HH:mm:ss' ),
       cpf: this.customerForm.value.cpf.replace( /\D+/g, '' ),
-      zipcode: this.customerForm.value.cep.replace( /\D+/g, '' ),
+      zipcode: this.customerForm.value.zipcode.replace( /\D+/g, '' ),
     } );
     const orginalFormValues = this.customerForm.value;
     this.customerForm.removeControl( 'datePicker' );
@@ -126,7 +123,7 @@ export class AddCustomerModalComponent implements OnInit {
       state: new FormControl( '', [ <any> Validators.required ] ),
       city: new FormControl( '', [ <any> Validators.required ] ),
       cpf: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cpf ] ),
-      cep: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ] ),
+      zipcode: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.cep ] ),
       phone_temp: new FormControl( '', [ <any> Validators.required, <any> NgBrazilValidators.telefone ] ),
       email_temp: new FormControl( '' ),
       skype_temp: new FormControl( '' ),

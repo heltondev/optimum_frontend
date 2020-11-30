@@ -11,7 +11,7 @@
             <div class="col-12">
                <div class="form-group">
                   <label for="name">Name</label>
-                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name" formControlName="name">
+                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name" formControlName="name" required>
                </div>
             </div>
          </div>
@@ -43,7 +43,7 @@
             <div class="col-6">
                <div class="form-group">
                   <label for="state">Zipcode</label>
-                  <input type="text" class="form-control" id="zipcode" placeholder="Zipcode" formControlName="cep" cep [textMask]="{mask: MASKS.cep.textMask}">
+                  <input type="text" class="form-control" id="zipcode" placeholder="Zipcode" formControlName="zipcode" cep [textMask]="{mask: MASKS.cep.textMask}">
                </div>
             </div>
             <div class="col-6">
@@ -89,7 +89,7 @@
                   <div class="input-group">
                      <input type="email" class="form-control" id="email_temp" placeholder="Email" formControlName="email_temp">
                      <div class="input-group-append">
-                        <button class="btn btn-outline-info" (click)="addContact();">+ Add Contact</button>
+                        <button class="btn btn-outline-info" (click)="addContact();" [disabled]="(customerForm.value.email_temp || customerForm.value.phone_temp || customerForm.value.skype_temp) ? 'false' : 'true'">+ Add Contact</button>
                      </div>
                   </div>
                </div>
@@ -119,7 +119,7 @@
       <div class="modal-footer">
          <div class="row">
             <div class="col"><button type="button" class="btn btn-outline-danger text-left" (click)="onDelete()">Delete</button></div>
-            <div class="col"><button type="button" class="btn btn-outline-success text-right" (click)="onSubmit()">Save</button></div>
+            <div class="col"><button type="button" class="btn btn-outline-warning text-right" (click)="onSubmit()">Update</button></div>
          </div>
       </div>
    </form>

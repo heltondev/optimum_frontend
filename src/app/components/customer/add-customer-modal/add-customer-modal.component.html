@@ -11,7 +11,7 @@
             <div class="col-12">
                <div class="form-group">
                   <label for="name">Name</label>
-                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name" formControlName="name">
+                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name">
                </div>
             </div>
          </div>
@@ -23,7 +23,7 @@
                      <div class="input-group">
                         <input type="text" class="form-control" id="date-of-birth" placeholder="Date of Birth" formControlName="datePicker" name="dp" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
-                           <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+                           <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">::</button>
                         </div>
                      </div>
                   </div>                    
@@ -43,7 +43,7 @@
             <div class="col-6">
                <div class="form-group">
                   <label for="state">Zipcode</label>
-                  <input type="text" class="form-control" id="zipcode" placeholder="Zipcode" formControlName="cep" cep [textMask]="{mask: MASKS.cep.textMask}">
+                  <input type="text" class="form-control" id="zipcode" placeholder="Zipcode" formControlName="zipcode" cep [textMask]="{mask: MASKS.cep.textMask}">
                </div>
             </div>
             <div class="col-6">
