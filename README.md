@@ -2,6 +2,25 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.17.
 
+## Dependencies
+
+Please before run this project, make sure you already have setup on your environment:
+   * [Java backend project]("https://github.com/heltondev/optimum_backend") installed and running
+   * [NodeJS and NPM]("https://nodejs.org/en/download/")
+   * [Angular CLI]("https://cli.angular.io/")
+
+## Setup and Installing
+
+Into the project root folder run ` npm install `
+
+## Dev Notes
+
+* In order to facilitate the execution of the project, on the login page user name and password will be already set
+   * Username: `test@test.com`
+   * Password: `123456`
+* Login system is protected on the frontend and backend by [JWT](https://jwt.io/)
+* API calls are protected on the backed by [JWT](https://jwt.io/)
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
