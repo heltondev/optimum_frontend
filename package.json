@@ -27,6 +27,7 @@
     "jquery": "^3.5.1",
     "js-brasil": "^2.3.8",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.1",
     "ng-brazil": "^2.2.2",
     "rxjs": "~6.4.0",
     "text-mask-addons": "^3.8.0",

@@ -10,10 +10,11 @@ import { NgBrazil } from 'ng-brazil';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthGuardService } from './auth/auth-guard.service';
+import { AddCustomerModalComponent } from './components/customer/add-customer-modal/add-customer-modal.component';
 import { SortableDirective } from './directives/sortable.directive';
 import { CustomerComponent } from './pages/customer/customer.component';
 import { LoginComponent } from './pages/login/login.component';
-import { AddCustomerModalComponent } from './components/customer/add-customer-modal/add-customer-modal.component';
+import { EditCustomerModalComponent } from './components/customer/edit-customer-modal/edit-customer-modal.component';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { AddCustomerModalComponent } from './components/customer/add-customer-mo
     LoginComponent,
     CustomerComponent,
     SortableDirective,
-    AddCustomerModalComponent
+    AddCustomerModalComponent,
+    EditCustomerModalComponent
   ],
   imports: [
     BrowserModule,

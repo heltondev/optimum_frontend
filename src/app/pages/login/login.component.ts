@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
     payload.password = SHA256( payload.password ).toString().toUpperCase();
     this.service.signIn( payload ).subscribe( ( response: ILoginSuccess ) => { 
       if ('token' in response) {
-        console.log( response.token );
         sessionStorage.setItem( 'token', response.token );
         this.router.navigateByUrl( '/customer' );
       }

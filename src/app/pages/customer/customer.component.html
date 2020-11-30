@@ -7,7 +7,7 @@
       <div class="col">
          <div class="form-group form-inline">
             Search: <input class="form-control ml-2" type="text" [formControl]="filter" />
-            <app-add-customer-modal></app-add-customer-modal>
+            <app-add-customer-modal (handleAddUserToTable)="addUserToTable($event)"></app-add-customer-modal>
          </div>
       </div>
       <div class="col text-right">
@@ -27,6 +27,7 @@
          <th scope="col">Zipcode</th>
          <th scope="col">CPF</th>
          <th scope="col">Contacts</th>
+         <th scope="col"></th>
       </tr>
    </thead>
    <tbody>
@@ -61,7 +62,11 @@
                <ng-container *ngIf="contact?.skypeId">
                   {{contact?.skypeId}} <br *ngIf="contact.skypeId" />
                </ng-container>
-            </span>
+               <hr *ngIf="item?.contacts?.length > 1">
+            </span> 
+         </td>
+         <td>
+            <app-edit-customer-modal (handleUpdateTable)="updateTable($event)" [customer]="item"></app-edit-customer-modal>
          </td>
       </tr>
    </tbody>

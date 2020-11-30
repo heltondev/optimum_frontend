@@ -1,7 +1,7 @@
-<ng-template #content let-modal>
-   <form id="customerForm" [formGroup]="customerForm">
+<ng-template #contentEdit let-modal>
+   <form id="customerFormEdit" [formGroup]="customerForm">
       <div class="modal-header text-center">
-         <h2 class="modal-title" id="modal-basic-title">Add new customer</h2>
+         <h2 class="modal-title" id="modal-basic-title">Edit customer</h2>
          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
             <span aria-hidden="true">&times;</span>
          </button>
@@ -11,7 +11,7 @@
             <div class="col-12">
                <div class="form-group">
                   <label for="name">Name</label>
-                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name">
+                  <input type="text" class="form-control" id="name" aria-describedby="name" placeholder="Enter name" formControlName="name" required>
                </div>
             </div>
          </div>
@@ -23,10 +23,10 @@
                      <div class="input-group">
                         <input type="text" class="form-control" id="date-of-birth" placeholder="Date of Birth" formControlName="datePicker" name="dp" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
-                           <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">::</button>
+                           <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
                         </div>
                      </div>
-                  </div>                    
+                  </div>
                </div>
             </div>
             <div class="col-6">
@@ -60,7 +60,7 @@
                   <label for="city">City</label>
                   <select class="form-control" id="city" placeholder="City" name="city" formControlName="city">
                      <option value="" disabled>Choose one option</option>
-                     <option *ngFor="let item of cities$ | async" [value]="item.nome">{{item.nome}}</option>
+                     <option *ngFor="let item of cities$ | async" [value]="item.nome" [selected]="item.name === customer.city">{{item.nome}}</option>
                   </select>
                </div>
             </div>
@@ -89,7 +89,7 @@
                   <div class="input-group">
                      <input type="email" class="form-control" id="email_temp" placeholder="Email" formControlName="email_temp">
                      <div class="input-group-append">
-                        <button class="btn btn-outline-info" (click)="addContact();">+ Add Contact</button>
+                        <button class="btn btn-outline-info" (click)="addContact();" [disabled]="(customerForm.value.email_temp || customerForm.value.phone_temp || customerForm.value.skype_temp) ? 'false' : 'true'">+ Add Contact</button>
                      </div>
                   </div>
                </div>
@@ -101,13 +101,15 @@
                         <th scope="col">E-mail</th>
                         <th scope="col">Phone</th>
                         <th scope="col">Skype</th>
+                        <th></th>
                      </tr>
                   </thead>
                   <tbody>
-                     <tr *ngFor="let item of customerForm?.value?.contacts">
+                     <tr *ngFor="let item of customerForm?.value?.contacts; index as idx">
                         <td>{{item?.email}}</td>
                         <td>{{item?.phone}}</td>
                         <td>{{item?.skypeId}}</td>
+                        <td><button class="btn btn-danger" (click)="removeContact(idx)">X</button></td>
                      </tr>
                   </tbody>
                </table>
@@ -115,9 +117,12 @@
          </div>
       </div>
       <div class="modal-footer">
-         <button type="button" class="btn btn-outline-dark" (click)="onSubmit()">Save</button>
+         <div class="row">
+            <div class="col"><button type="button" class="btn btn-outline-danger text-left" (click)="onDelete()">Delete</button></div>
+            <div class="col"><button type="button" class="btn btn-outline-warning text-right" (click)="onSubmit()">Update</button></div>
+         </div>
       </div>
    </form>
 </ng-template>
 
-<button type="button" class="ml-3 btn btn-outline-success" (click)="open(content)"><samp>+</samp> CUSTOMER</button>
+<button type="button" class="ml-3 btn btn-outline-info" (click)="open(contentEdit)">EDIT</button>
