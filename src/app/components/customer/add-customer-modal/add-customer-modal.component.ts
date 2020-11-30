@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ModalDismissReasons, NgbDateStruct, NgbModal, NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import * as MOMENT from 'moment';
 import { MASKS, NgBrazilValidators } from 'ng-brazil';
 import { Observable } from 'rxjs';
 import { ICustomer } from 'src/app/interfaces/customer';
@@ -14,16 +15,14 @@ import { ApiService } from 'src/app/services/api.service';
 export class AddCustomerModalComponent implements OnInit {
   
   MASKS = MASKS;
-  model: NgbDateStruct;
-  time: NgbTimeStruct;
   closeResult = '';
   states$: Observable<any> = new Observable(null);
   cities$: Observable<any> = new Observable(null);
   customerForm = new FormGroup( {
     name: new FormControl( ''  ),
     dateOfBirth: new FormControl( '' ),
-    datePicker: new FormControl( '' ),
-    timePicker: new FormControl( '' ),
+    datePicker: new FormControl( { year: null, month: null, day: null} ),
+    timePicker: new FormControl( { hour: null, minute: null, second: null } ),
     contacts: new FormControl( [] || null ),
     state: new FormControl( '', [ <any> Validators.required] ),
     city: new FormControl( '', [ <any> Validators.required] ),
@@ -61,10 +60,16 @@ export class AddCustomerModalComponent implements OnInit {
     } )
   }
 
-  onSubmit () : void { 
+  onSubmit (): void { 
+    console.log(this.customerForm.value.datePicker);
+    console.log(this.customerForm.value.timerPicker);
+    
     this.customerForm.patchValue( {
-      dateOfBirth: `${ this.customerForm.value.datePicker.year }-${ this.customerForm.value.datePicker.month }-${ this.customerForm.value.datePicker.day }T${ this.customerForm.value.timePicker.hour }:${ this.customerForm.value.timePicker.minute }:${ this.customerForm.value.timePicker.second}`
+      dateOfBirth: MOMENT( `${ this.customerForm.value.datePicker.year }-${ this.customerForm.value.datePicker.month }-${ this.customerForm.value.datePicker.day } ${ this.customerForm.value.timePicker.hour }:${ this.customerForm.value.timePicker.minute }:${ this.customerForm.value.timePicker.second }` ).format( 'YYYY-MM-DD HH:mm:ss' ),
+      cpf: this.customerForm.value.cpf.replace( /\D+/g, '' ),
+      zipcode: this.customerForm.value.cep.replace( /\D+/g, '' ),
     } );
+    const orginalFormValues = this.customerForm.value;
     this.customerForm.removeControl( 'datePicker' );
     this.customerForm.removeControl( 'timePicker' );
     this.customerForm.removeControl( 'phone_temp' );
@@ -76,6 +81,7 @@ export class AddCustomerModalComponent implements OnInit {
         if ( 'id' in response ) {
           this.handleAddUserToTable.emit( response );
         } else { 
+          this.customerForm.patchValue(orginalFormValues);
           this.handleAddUserToTable.emit( null );
           alert( "Error: Customer not added" );
         }
@@ -111,8 +117,6 @@ export class AddCustomerModalComponent implements OnInit {
   }
 
   private resetForm (): void { 
-    this.model = {year: null, month: null, day: null};
-    this.time = { hour: null, minute: null, second: null };
     this.customerForm = new FormGroup( {
       name: new FormControl( '' ),
       dateOfBirth: new FormControl( '' ),

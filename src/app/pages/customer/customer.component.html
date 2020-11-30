@@ -27,6 +27,7 @@
          <th scope="col">Zipcode</th>
          <th scope="col">CPF</th>
          <th scope="col">Contacts</th>
+         <th scope="col"></th>
       </tr>
    </thead>
    <tbody>
@@ -62,7 +63,10 @@
                   {{contact?.skypeId}} <br *ngIf="contact.skypeId" />
                </ng-container>
                <hr *ngIf="item?.contacts?.length > 1">
-            </span>
+            </span> 
+         </td>
+         <td>
+            <app-edit-customer-modal (handleUpdateTable)="updateTable($event)" [customer]="item"></app-edit-customer-modal>
          </td>
       </tr>
    </tbody>

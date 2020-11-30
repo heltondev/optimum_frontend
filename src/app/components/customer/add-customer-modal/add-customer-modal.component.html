@@ -21,7 +21,7 @@
                   <label for="dateOfBirth">Date of Birth</label>
                   <div class="form-group">
                      <div class="input-group">
-                        <input type="text" class="form-control" id="date-of-birth" placeholder="Date of Birth" formControlName="datePicker" name="dp" [(ngModel)]="model" ngbDatepicker #d="ngbDatepicker">
+                        <input type="text" class="form-control" id="date-of-birth" placeholder="Date of Birth" formControlName="datePicker" name="dp" ngbDatepicker #d="ngbDatepicker">
                         <div class="input-group-append">
                            <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
                         </div>
@@ -30,7 +30,7 @@
                </div>
             </div>
             <div class="col-6">
-               <ngb-timepicker formControlName="timePicker" [(ngModel)]="time" [seconds]="true"></ngb-timepicker>
+               <ngb-timepicker formControlName="timePicker" [seconds]="true"></ngb-timepicker>
             </div>
          </div>
          <div class="row">

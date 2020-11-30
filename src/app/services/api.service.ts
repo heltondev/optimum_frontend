@@ -9,7 +9,13 @@ import { ILogin } from '../interfaces/login';
 })
 export class ApiService {
 
-  
+  private headers = new HttpHeaders( {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': "http://localhost:4200",
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Accept, Authorization',
+    'Authorization': `Bearer ${ sessionStorage.getItem( 'token' ) }`,
+  } );
 
   constructor (
     private http: HttpClient
@@ -20,15 +26,8 @@ export class ApiService {
   }
 
   getAllCustomers () {
-    const headers = new HttpHeaders( {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': "http://localhost:4200",
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Accept, Authorization',
-      'Authorization': `Bearer ${ sessionStorage.getItem( 'token' ) }`,
-    } )
     return this.http.get<ICustomer[]>( `${ environment.api.url }/api/v1/customers`, {
-      headers: ( headers ),
+      headers: ( this.headers ),
       withCredentials: true
     } );
   }
@@ -42,16 +41,16 @@ export class ApiService {
   }
 
   addCustomer (payload: ICustomer) { 
-    const headers = new HttpHeaders( {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': "http://localhost:4200",
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token, Accept, Authorization',
-      'Authorization': `Bearer ${ sessionStorage.getItem( 'token' ) }`,
-    } );
     return this.http.post<ICustomer>( `${ environment.api.url }/api/v1/customers`, payload, {
-      headers: ( headers ),
+      headers: ( this.headers ),
       withCredentials: true
     } );
   }
+
+  deleteCustomer ( id: string | number ) { 
+    return this.http.delete<void>( `${ environment.api.url }/api/v1/customers/${id}`, {
+      headers: ( this.headers ),
+      withCredentials: true
+    } );
+  } 
 }

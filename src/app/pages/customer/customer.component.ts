@@ -2,6 +2,7 @@ import { DecimalPipe } from '@angular/common';
 import { Component, OnInit, PipeTransform } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { ICustomer } from 'src/app/interfaces/customer';
@@ -23,19 +24,13 @@ export class CustomerComponent implements OnInit {
   constructor (
     private pipe: DecimalPipe,
     private apiService: ApiService,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal,
   ) { }
   
   ngOnInit () {
     try {
-      this.items$ = this.apiService.getAllCustomers();
-      this.items$.subscribe( (response: ICustomer[]) => this.items = response);
-      setTimeout( () => {
-        this.items$ = this.filter.valueChanges.pipe(
-          startWith( '' ),
-          map( text => this.search( text, this.pipe ) )
-        );
-      }, 1000 );
+      this.refreshTable();
     } catch (error) {
       throw new Error( "Error retrieving customer's list" );
     } 
@@ -52,6 +47,17 @@ export class CustomerComponent implements OnInit {
     }
   }
 
+  private refreshTable () { 
+    this.items$ = this.apiService.getAllCustomers();
+    this.items$.subscribe( ( response: ICustomer[] ) => this.items = response );
+    setTimeout( () => {
+      this.items$ = this.filter.valueChanges.pipe(
+        startWith( '' ),
+        map( text => this.search( text, this.pipe ) )
+      );
+    }, 1000 );
+  }
+
   logout (): void {
     sessionStorage.removeItem( 'token' );
     this.router.navigateByUrl( '/' );
@@ -59,7 +65,6 @@ export class CustomerComponent implements OnInit {
 
   addUserToTable ( newCustomer: ICustomer ): void { 
     if ( 'id' in newCustomer ) {
-      this.items.push( newCustomer );
       this.items$ = this.items$
         .pipe(
           map( customerList => { 
@@ -70,6 +75,9 @@ export class CustomerComponent implements OnInit {
     }
   }
 
-
-
+  updateTable ( value: boolean ) { 
+    if (value) {
+      this.refreshTable();
+    }
+  }
 }
